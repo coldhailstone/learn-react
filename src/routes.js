@@ -1,11 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from '../App';
-import HomePage from '../pages/HomePage';
-import ListPage from '../pages/ListPage';
-import CreatePage from '../pages/CreatePage';
-import EditPage from '../pages/EditPage';
+import App from './App';
+import HomePage from './pages/HomePage';
+import ListPage from './pages/ListPage';
+import CreatePage from './pages/CreatePage';
+import EditPage from './pages/EditPage';
 
-const router = createBrowserRouter([
+const routes = [
     {
         path: "/",
         element: <App />,
@@ -28,6 +27,6 @@ const router = createBrowserRouter([
         },
         ]
     },
-]);
+]
 
-export default router;
+export default routes;
