@@ -28,7 +28,19 @@ function ListPage() {
             </div>
             {posts.map((post) => {
                 return (
-                    <Card key={post.id} title={post.title} onClick={() => navigate('/blogs/edit')} />
+                    <Card key={post.id} title={post.title} onClick={() => navigate('/blogs/edit')}>
+                        <div>
+                            <button 
+                                className='btn btn-danger btn-sm' 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    console.log('zz')
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </Card>
                 )
             })}
         </div>
