@@ -1,19 +1,14 @@
 {
   "posts": [
     {
-      "title": "hello",
-      "body": "body",
+      "title": "zz",
+      "body": "z",
       "id": 1
     },
     {
-      "title": "zzzz",
-      "body": "hellow",
+      "title": "gghg",
+      "body": "zz",
       "id": 2
-    },
-    {
-      "title": "김은하 바보",
-      "body": "김은하는 정말로 바보입니다",
-      "id": 3
     }
   ]
 }
