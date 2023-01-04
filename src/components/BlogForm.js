@@ -10,7 +10,8 @@ function BlogForm() {
     const onSubmit = async () => {
         await axios.post('http://localhost:3001/posts', {
             title,
-            body
+            body,
+            createdAt: Date.now()
         });
         navigate('/blogs');
     }
@@ -22,7 +23,6 @@ function BlogForm() {
             <label className='form-label'>Title</label>
             <input className='form-control' value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
-          <button className='btn btn-primary'>Post</button>
           <div className="mb-3">
             <label className='form-label'>Body</label>
             <textarea className='form-control' value={body} rows='20' onChange={(e) => setBody(e.target.value)} />
