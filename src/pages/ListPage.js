@@ -36,7 +36,7 @@ function ListPage() {
         }
 
         return (
-            posts.map((post) => {
+            posts.filter((post) => post.publish).map((post) => {
                 return (
                     <Card key={post.id} title={post.title} onClick={() => navigate(`/blogs/${post.id}`)}>
                         <div>
