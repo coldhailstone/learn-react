@@ -37,6 +37,7 @@ function BlogForm({ editing }) {
               body,
               publish
           });
+          navigate('/blogs');
         } else {
           await axios.post('http://localhost:3001/posts', {
               title,
@@ -44,15 +45,15 @@ function BlogForm({ editing }) {
               publish,
               createdAt: Date.now()
           });
+          navigate('/admin');
         }
-        navigate('/blogs');
     };
 
     const goBack = () => {
       if (editing) {
         navigate(`/blogs/${id}`);
       } else {
-        navigate('/blogs');
+        navigate('/admin');
       }
     }
 
