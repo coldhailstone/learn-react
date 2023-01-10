@@ -10,9 +10,34 @@ function BlogList({ isAdmin }) {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [numberOfPosts, setNumberOfPosts] = useState(0);
+    const [numberOfPages, setNumberOfPages] = useState(0);
+    const limit = 5;
 
-    const getPosts = async () => {
-        const response = await axios.get('http://localhost:3001/posts')
+    useEffect(() => {
+        getPosts();
+        setNumberOfPages(Math.ceil(numberOfPosts/limit))
+    }, [numberOfPosts]);
+
+    const getPosts = async (page = 1) => {
+        setCurrentPage(page)
+
+        let params = {
+            _page: page,
+            _limit: limit,
+            _sort: 'id',
+            _order: 'desc'
+        }
+
+        if (!isAdmin) {
+            params.publish = true
+        }
+
+        const response = await axios.get('http://localhost:3001/posts', {
+            params
+        })
+        setNumberOfPosts(response.headers['x-total-count'])
         setPosts(response.data);
         setLoading(false)
     }
@@ -24,10 +49,6 @@ function BlogList({ isAdmin }) {
         setPosts(prevPosts => prevPosts.filter(post => post.id !== id))
     }
 
-    useEffect(() => {
-        getPosts();
-    }, []);
-
     if (loading) {
         return <LoadingSpinner />
     }
@@ -38,7 +59,7 @@ function BlogList({ isAdmin }) {
 
     const renderBlogList = () => {
         return (
-            posts.filter((post) => isAdmin || post.publish).map((post) => {
+            posts.map((post) => {
                 return (
                     <Card key={post.id} title={post.title} onClick={() => navigate(`/blogs/${post.id}`)}>
                         <div>
@@ -58,7 +79,11 @@ function BlogList({ isAdmin }) {
     return (
         <div>
             {renderBlogList()}
-            <Pagination />
+            {numberOfPages > 1 && <Pagination 
+                currentPage={currentPage} 
+                numberOfPages={numberOfPages} 
+                onClick={getPosts} />
+            }
         </div>
     )
 }
