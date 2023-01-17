@@ -1,11 +1,30 @@
 import { Link, NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout } from '../store/authSlice';
 
 function NavBar() {
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const dispatch = useDispatch();
+
     return (
         <nav className="navbar navbar-dark bg-dark">
             <div className="container">
                 <Link className="navbar-brand" to="/">Home</Link>
                 <ul className="navbar-nav" style={{flexDirection: 'row'}}>
+                    <li className="nav-item me-2">
+                        <button 
+                            className="text-white btn btn-link text-decoration-none"
+                            onClick={() => {
+                                if (isLoggedIn) {
+                                    dispatch(logout());
+                                } else {
+                                    dispatch(login());
+                                }
+                            }}  
+                        >
+                            {isLoggedIn ? 'Logout' : 'Login'}
+                        </button>
+                    </li>
                     <li className="nav-item me-2">
                         <NavLink className={({ isActive }) =>
                             [

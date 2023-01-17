@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Card from '../components/Card';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Pagination from '../components/Pagination';
+import useToast from '../hooks/toast';
 
 function BlogList({ isAdmin }) {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ function BlogList({ isAdmin }) {
     const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [searchText, setSearchText] = useState('');
+    const { addToast } = useToast();
     const limit = 5;
 
     const getPosts = useCallback(async (page = 1) => {
@@ -66,8 +68,12 @@ function BlogList({ isAdmin }) {
     const deleteBlog = async (e, id) => {
         e.stopPropagation();
 
-        await axios.delete(`http://localhost:3001/posts/${id}`)
-        setPosts(prevPosts => prevPosts.filter(post => post.id !== id))
+        await axios.delete(`http://localhost:3001/posts/${id}`);
+        setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+        addToast({
+            text: 'Successfully deleted',
+            type: 'success'
+        });
     }
 
     if (loading) {

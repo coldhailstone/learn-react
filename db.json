@@ -1,44 +1,18 @@
 {
   "posts": [
     {
-      "title": "zz",
-      "body": "z",
-      "createdAt": 1672835626416,
-      "id": 1
-    },
-    {
-      "title": "gghg",
-      "body": "zz",
-      "createdAt": 1672835626416,
+      "title": "test",
+      "body": "tttt",
+      "publish": false,
+      "createdAt": 1673918141991,
       "id": 2
     },
     {
-      "title": "react.js",
-      "body": "react kings",
-      "createdAt": 1672835626416,
-      "id": 3,
-      "publish": true
-    },
-    {
-      "title": "하하하",
-      "body": "호호호",
+      "title": "gggasdz",
+      "body": "qweqwe",
       "publish": false,
-      "createdAt": 1673255194531,
-      "id": 4
-    },
-    {
-      "title": "ggg",
-      "body": "ggg",
-      "publish": false,
-      "createdAt": 1673255250911,
-      "id": 5
-    },
-    {
-      "title": "zzewtwer",
-      "body": "gdsgsdgsd",
-      "publish": false,
-      "createdAt": 1673343347751,
-      "id": 6
+      "createdAt": 1673921484040,
+      "id": 3
     }
   ]
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import useToast from '../hooks/toast';
 
 function BlogForm({ editing }) {
     const navigate = useNavigate();
@@ -12,6 +13,9 @@ function BlogForm({ editing }) {
     const [originBody, setOriginBody] = useState('');
     const [publish, setPublish] = useState(false);
     const [originPublish, setOriginPublish] = useState(false);
+    const [titleError, setTitleError] = useState(false);
+    const [bodyError, setBodyError] = useState(false);
+    const { addToast } = useToast();
 
     useEffect(() => {
       if (editing) {
@@ -30,13 +34,39 @@ function BlogForm({ editing }) {
       return title !== originTitle || body !== originBody || publish !== originPublish
     };
 
+    const validateForm = () => {
+        let validated = true;
+
+        if (!title) {
+            setTitleError(true);
+            validated = false;
+        } else {
+            setTitleError(false);
+        }
+
+        if (!body) {
+            setBodyError(true);
+            validated = false;
+        } else {
+            setBodyError(false);
+        }
+
+        return validated;
+    }
+
     const onSubmit = async () => {
+        if (!validateForm()) return
+
         if (editing) {
           await axios.patch(`http://localhost:3001/posts/${id}`, {
               title,
               body,
               publish
           });
+          addToast({
+            type: 'success',
+            text: 'Successfully edited!'
+          })
           navigate('/blogs');
         } else {
           await axios.post('http://localhost:3001/posts', {
@@ -45,6 +75,10 @@ function BlogForm({ editing }) {
               publish,
               createdAt: Date.now()
           });
+          addToast({
+            type: 'success',
+            text: 'Successfully created!'
+          })
           navigate('/admin');
         }
     };
@@ -63,25 +97,31 @@ function BlogForm({ editing }) {
 
     return (
         <div>
-          <h1>{editing ? 'Edit' : 'Create' } a blog post</h1>
-          <div className="mb-3">
-            <label className='form-label'>Title</label>
-            <input className='form-control' value={title} onChange={(e) => setTitle(e.target.value)} />
-          </div>
-          <div className="mb-3">
-            <label className='form-label'>Body</label>
-            <textarea className='form-control' value={body} rows='20' onChange={(e) => setBody(e.target.value)} />
-          </div>
-          <div className='form-check mb-3'>
-            <input className='form-check-input' type="checkbox" checked={publish} onChange={onChangePublish} />
-            <label className='form-check-label'>Publish</label>
-          </div>
-          <button className='btn btn-primary' onClick={onSubmit} disabled={editing && !isEdited()}>
-            {editing ? 'Edit' : 'Post' }
-          </button>
-          <button className='btn btn-danger ms-2' onClick={goBack}>
-            Cancel
-          </button>
+            <h1>{editing ? 'Edit' : 'Create' } a blog post</h1>
+            <div className="mb-3">
+                <label className='form-label'>Title</label>
+                <input className={`form-control ${titleError ? 'border-danger' : ''}`} value={title} onChange={(e) => setTitle(e.target.value)} />
+                {titleError && <div className='text-danger'>
+                    Title is required.
+                </div>}
+            </div>
+            <div className="mb-3">
+                <label className='form-label'>Body</label>
+                <textarea className={`form-control ${bodyError ? 'border-danger' : ''}`} value={body} rows='20' onChange={(e) => setBody(e.target.value)} />
+                {bodyError && <div className='text-danger'>
+                    Body is required.
+                </div>}
+            </div>
+            <div className='form-check mb-3'>
+                <input className='form-check-input' type="checkbox" checked={publish} onChange={onChangePublish} />
+                <label className='form-check-label'>Publish</label>
+            </div>
+            <button className='btn btn-primary' onClick={onSubmit} disabled={editing && !isEdited()}>
+                {editing ? 'Edit' : 'Post' }
+            </button>
+            <button className='btn btn-danger ms-2' onClick={goBack}>
+                Cancel
+            </button>
         </div>
     );
 };
