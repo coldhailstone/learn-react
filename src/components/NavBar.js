@@ -25,7 +25,7 @@ function NavBar() {
                             {isLoggedIn ? 'Logout' : 'Login'}
                         </button>
                     </li>
-                    <li className="nav-item me-2">
+                    {isLoggedIn ? <li className="nav-item me-2">
                         <NavLink className={({ isActive }) =>
                             [
                                 'nav-link',
@@ -36,7 +36,7 @@ function NavBar() {
                         } aria-current="page" to="/admin">
                             Admin
                         </NavLink>
-                    </li>
+                    </li> : null}
                     <li className="nav-item">
                         <NavLink className={({ isActive }) =>
                             [
