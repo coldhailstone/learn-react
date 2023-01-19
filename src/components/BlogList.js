@@ -18,6 +18,7 @@ function BlogList({ isAdmin }) {
     const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [searchText, setSearchText] = useState('');
+    const [error, setError] = useState('');
     const { addToast } = useToast();
     const limit = 5;
 
@@ -34,12 +35,21 @@ function BlogList({ isAdmin }) {
             params.publish = true
         }
 
-        const response = await axios.get('http://localhost:3001/posts', {
-            params
-        })
-        setNumberOfPosts(response.headers['x-total-count'])
-        setPosts(response.data);
-        setLoading(false)
+        try {
+            const response = await axios.get('http://localhost:3001/posts', {
+                params
+            })
+            setNumberOfPosts(response.headers['x-total-count'])
+            setPosts(response.data);
+        } catch (error) {
+            setError('Something went wrong in database');
+            addToast({
+                text: 'Something went wrong',
+                type: 'danger'
+            });
+        } finally {
+            setLoading(false);
+        }
     }, [isAdmin, searchText])
     
     useEffect(() => {
@@ -68,12 +78,20 @@ function BlogList({ isAdmin }) {
     const deleteBlog = async (e, id) => {
         e.stopPropagation();
 
-        await axios.delete(`http://localhost:3001/posts/${id}`);
-        setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
-        addToast({
-            text: 'Successfully deleted',
-            type: 'success'
-        });
+        try {
+            await axios.delete(`http://localhost:3001/posts/${id}`);
+            // setPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+            getPosts(1);
+            addToast({
+                text: 'Successfully deleted',
+                type: 'success'
+            });
+        } catch (error) {
+            addToast({
+                text: 'The blog could not be deleted.',
+                type: 'danger'
+            });
+        }
     }
 
     if (loading) {
@@ -97,6 +115,10 @@ function BlogList({ isAdmin }) {
                 )
             })
         )
+    }
+
+    if (error) {
+        return <div>{error}</div>
     }
 
     return (
